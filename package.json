@@ -1,0 +1,19 @@
+{
+  "name": "igme-430-project1",
+  "version": "1.0.0",
+  "description": "project 1 igme 430",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JordynA97/IGME-430-Project1.git"
+  },
+  "author": "Jordyn Antinore",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JordynA97/IGME-430-Project1/issues"
+  },
+  "homepage": "https://github.com/JordynA97/IGME-430-Project1#readme"
+}

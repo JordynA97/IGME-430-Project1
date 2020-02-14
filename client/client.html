@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Our simple HTTP server</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  <script type="text/babel">
+
+  //parse the json
+  const parseJSON = (xhr, content) => {
+    const object = JSON.parse(xhr.response);
+
+    if(object.message){
+      const p = document.createElement('p');
+      p.textContent = `Message: ${object.message}`;
+      content.apphendChild(p);
+    }
+
+    if(object.users){
+      const userList = document.createElement('p');
+      const users = JSON.stringify(object.users);
+      userList.textContent = users;
+      content.apphendChild(userList);
+    }
+  };
+
+  const responseHandler = (xhr, parseResponse) => {
+    const content = document.querySelector('#content');
+
+    switch(xhr.status){
+      case 200:
+        content.innerHTML = `<b>Success! Status Code: 200</b>`;
+        break;
+      case 201:
+        content.innerHTML = `<b>Created! Status Code: 201</b>`;
+        break;
+      case 204:
+        content.innerHTML = `<b>Updated with no content! Status Code: 204</b>`;
+        break;
+      case 400:
+        content.innerHTML = `<b>Bad Request! Status Code: 400. fields must be filled</b>`;
+        break;
+      case 404:
+        content.innerHTML = `<b>Resource Not Found! Status Code: 404</b>`;
+        break;
+      default:
+        content.innerHTML = `<b>Error code not impemented!</b>`;
+        break;
+    }
+  };
+
+  const sendPostMethod = (e, nameForm) => {
+    const nameAction = nameForm.getAttribute('action');
+    const nameMethod = nameForm.getAttribute('method');
+
+    const name = nameForm.querySelector('#nameField');
+    const age = nameForm.querySelector('#ageField');
+
+    //have to set up for a new request
+    const xhr = new XMLHttpRequest();
+
+    xhr.open(nameMethod, nameAction);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.onload = () => responseHandler(xhr, true);
+
+    const data = `name=${name.value}&age=${age.value}`;
+    xhr.send(data);
+    e.preventDefault();
+    return false;
+  };
+
+  const sendGetMethod = (e, nameForm) => {
+    const userMethod = userForm.getAttribute('method');
+    const url = userForm.querySelector('#urlField');
+    const method = userForm.querySelector('#methodSelect');
+
+    const xhr = new XMLHttpRequest();
+    xhr.open(method.value, url.value);
+    if(method.value === 'get'){
+      xhr.onload = () => responseHandler(xhr, true);
+    }else{
+      xhr.onload = () => responseHandler(xhr, false);
+    }
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.send();
+
+    e.preventDefault();
+    return false;
+  }
+
+  const init = () => {
+    const nameForm = document.getElementById('nameForm');
+    const userForm = document.getElementById('userForm');
+
+    const addUser = (e) => sendPostMethod(e, nameForm);
+    nameForm.addEventListener('submit', addUser);
+
+    
+    const getUser = (e) => sendGetMethod(e, userForm);
+    userForm.addEventListener('submit', getUser);
+  };
+
+  window.onload = init;
+  </script>
+</head>
+<body>
+  <section id="top">
+    <h3>POST Status Code Tests</h3>
+    <form id="nameForm" action="/addUser" method="post">
+      <label for="name">Name: </label>
+      <input id="nameField" type="text" name="name" />
+      <label for="age">Age: </label>
+      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+      <input type="submit" value="Add User" />
+    </form>
+    <form id="userForm" action="/getUsers" method="get">
+      <select id='urlField'>
+        <option value='/getUsers'>/getUsers</option>
+        <option value='/notReal'>/notReal</option>
+      </select>
+      <select id="methodSelect">
+        <option value="get">GET</option>
+        <option value="head">HEAD</option>
+      </select>
+      <input type="submit" value="Get User" />
+    </form>
+  </section>
+  <section id="content">
+    <p id=></p>
+  </section>
+</body>
+</html>
