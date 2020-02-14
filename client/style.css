@@ -3,7 +3,9 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
-  background-image: "background.jpg";
+  background-color: #cccccc;
+  background-image: linear-gradient(white, #88a4db);
+  overflow: hidden;
 }
 
 #top {

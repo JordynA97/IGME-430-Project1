@@ -107,14 +107,24 @@
 </head>
 <body>
   <section id="top">
-    <h3>POST Status Code Tests</h3>
+    <h3>Create or Edit a Bucket List!</h3>
     <form id="nameForm" action="/addUser" method="post">
       <label for="name">Name: </label>
-      <input id="nameField" type="text" name="name" />
+      <input id="nameField" type="text" name="name"/>
+      <p></p>
+
       <label for="age">Age: </label>
       <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
-      <input type="submit" value="Add User" />
+      <p></p>
+
+      <label for="bucketListItem">Bucket List Item:</label>
+      <input id="itemField" type="text" name="bucketListItem"/>
+
+      <p></p>
+      <input type="submit" value="Add User"/>
     </form>
+
+    <p></p>
     <form id="userForm" action="/getUsers" method="get">
       <select id='urlField'>
         <option value='/getUsers'>/getUsers</option>
