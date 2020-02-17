@@ -1,7 +1,8 @@
 // empty object
-const users = {};
+const bucketList = {
+  items: []
+};
 
-// basic methods from what we learned in class to get users, etc
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   response.write(JSON.stringify(object));
@@ -13,42 +14,38 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
-const getUsers = (request, response) => {
+const getItems = (request, response) => {
   const responseJSON = {
-    users,
+    bucketList,
   };
 
   respondJSON(request, response, 200, responseJSON);
 };
 
-const getUsersMeta = (request, response) => respondJSONMeta(request, response, 200);
+const getItemsMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 const notFoundMeta = (request, response) => respondJSONMeta(request, response, 404);
 
-
-const addUser = (request, response, body) => {
+const addItem = (request, response, body) => {
   const responseJSON = {
-    message: 'Name and age are both required.',
+    message: 'Must enter a bucket list item.',
   };
 
-  if (!body.name || !body.age) {
+  if (!body.bucketListItem) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 
-
   let responseCode = 201;
 
-  if (users[body.name]) {
+  if (body.bucketListItem) {
     responseCode = 204;
   } else {
-    users[body.name] = {};
+    responseCode = 400;
   }
 
 
-  users[body.name].name = body.name;
-  users[body.name].age = body.age;
-
+  bucketList.items.push(body.bucketListItem);
 
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';
@@ -63,15 +60,14 @@ const notFound = (request, response) => {
     id: 'notFound',
   };
 
-
   respondJSON(request, response, 404, responseJSON);
 };
 
 // export methods
 module.exports = {
-  getUsers,
-  addUser,
+  getItems,
+  addItem,
   notFound,
-  getUsersMeta,
+  getItemsMeta,
   notFoundMeta,
 };

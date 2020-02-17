@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Project open</title>
+  <title>Create a Bucket List!</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
+const content = document.querySelector('#content');
+
   //parse the json
   const parseJSON = (xhr, content) => {
     const object = JSON.parse(xhr.response);
 
-    if(object.message){
-      const p = document.createElement('p');
-      p.textContent = `Message: ${object.message}`;
-      content.apphendChild(p);
+    if(xhr.response){
+      const object = JSON.parse(xhr.response);
+      console.dir(object);
     }
 
-    if(object.users){
-      const userList = document.createElement('p');
-      const users = JSON.stringify(object.users);
-      userList.textContent = users;
-      content.apphendChild(userList);
+    if(object.message){
+      content.innerHTML += `<p>${object.message}</p>`;
     }
   };
 
   const responseHandler = (xhr, parseResponse) => {
-    const content = document.querySelector('#content');
-
     switch(xhr.status){
       case 200:
         content.innerHTML = `<b>Success! Status Code: 200</b>`;
@@ -50,31 +46,29 @@
     }
   };
 
-  const sendPostMethod = (e, nameForm) => {
-    const nameAction = nameForm.getAttribute('action');
-    const nameMethod = nameForm.getAttribute('method');
+  const sendPostMethod = (e, itemForm) => {
+    const itemAction = itemForm.getAttribute('action');
+    const itemMethod = itemForm.getAttribute('method');
 
-    const name = nameForm.querySelector('#nameField');
-    const age = nameForm.querySelector('#ageField');
+    const bucketItem = itemForm.querySelector('#itemField');
 
     //have to set up for a new request
     const xhr = new XMLHttpRequest();
 
-    xhr.open(nameMethod, nameAction);
+    xhr.open(itemMethod, itemAction);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.onload = () => responseHandler(xhr, true);
 
-    const data = `name=${name.value}&age=${age.value}`;
+    const data = `bucketListItem=${bucketItem.value}`;
     xhr.send(data);
-    e.preventDefault();
     return false;
   };
 
-  const sendGetMethod = (e, nameForm) => {
-    const userMethod = userForm.getAttribute('method');
-    const url = userForm.querySelector('#urlField');
-    const method = userForm.querySelector('#methodSelect');
+  const sendGetMethod = (e, itemForm) => {
+    const userMethod = bucketListForm.getAttribute('method');
+    const url = bucketListForm.querySelector('#urlField');
+    const method = bucketListForm.querySelector('#methodSelect');
 
     const xhr = new XMLHttpRequest();
     xhr.open(method.value, url.value);
@@ -91,15 +85,15 @@
   }
 
   const init = () => {
-    const nameForm = document.getElementById('nameForm');
-    const userForm = document.getElementById('userForm');
+    const itemForm = document.getElementById('itemForm');
+    const bucketListForm = document.getElementById('bucketListForm');
 
-    const addUser = (e) => sendPostMethod(e, nameForm);
-    nameForm.addEventListener('submit', addUser);
+    const addItem = (e) => sendPostMethod(e, itemForm);
+    itemForm.addEventListener('submit', addItem);
 
     
-    const getUser = (e) => sendGetMethod(e, userForm);
-    userForm.addEventListener('submit', getUser);
+    const getItem = (e) => sendGetMethod(e, bucketListForm);
+    bucketListForm.addEventListener('submit', getItem);
   };
 
   window.onload = init;
@@ -108,37 +102,28 @@
 <body>
   <section id="top">
     <h3>Create or Edit a Bucket List!</h3>
-    <form id="nameForm" action="/addUser" method="post">
-      <label for="name">Name: </label>
-      <input id="nameField" type="text" name="name"/>
-      <p></p>
-
-      <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
-      <p></p>
-
+    <form id="itemForm" action="/addItem" method="post">
       <label for="bucketListItem">Bucket List Item:</label>
       <input id="itemField" type="text" name="bucketListItem"/>
 
       <p></p>
-      <input type="submit" value="Add User"/>
+      <input type="submit" value="Add Item"/>
     </form>
 
     <p></p>
-    <form id="userForm" action="/getUsers" method="get">
+    <form id="bucketListForm" action="/getItems" method="get">
       <select id='urlField'>
-        <option value='/getUsers'>/getUsers</option>
+        <option value='/getItems'>/getItems</option>
         <option value='/notReal'>/notReal</option>
       </select>
       <select id="methodSelect">
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>
-      <input type="submit" value="Get User" />
+      <input type="submit" value="Get Item" />
     </form>
   </section>
   <section id="content">
-    <p id=></p>
   </section>
 </body>
 </html>
