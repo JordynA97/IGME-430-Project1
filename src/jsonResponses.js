@@ -1,4 +1,4 @@
-// empty object
+// start with empty bucket list
 const bucketList = {
   items: []
 };
@@ -44,7 +44,7 @@ const addItem = (request, response, body) => {
     responseCode = 400;
   }
 
-
+  //push new item from text field into the array
   bucketList.items.push(body.bucketListItem);
 
   if (responseCode === 201) {

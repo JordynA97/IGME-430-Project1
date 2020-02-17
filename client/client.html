@@ -7,22 +7,30 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
-const content = document.querySelector('#content');
+
 
   //parse the json
   const parseJSON = (xhr, content) => {
-    const object = JSON.parse(xhr.response);
+    const list = document.querySelector('#content');
 
     if(xhr.response){
       const object = JSON.parse(xhr.response);
-      console.dir(object);
+          
+      //check if object is not null then go through the array and make a list.
+      if(object.bucketList.items){
+        list.innerHTML = `<p></p>`;
+
+        for(let i = 0; i < object.bucketList.items.length; i++){
+          
+        list.innerHTML += `<br> ${object.bucketList.items[i]} </br>`;
+        }
+      }
+      
     }
 
-    if(object.message){
-      content.innerHTML += `<p>${object.message}</p>`;
-    }
   };
 
+  //keep in case of needing to check errors
   const responseHandler = (xhr, parseResponse) => {
     switch(xhr.status){
       case 200:
@@ -32,7 +40,7 @@ const content = document.querySelector('#content');
         content.innerHTML = `<b>Created! Status Code: 201</b>`;
         break;
       case 204:
-        content.innerHTML = `<b>Updated with no content! Status Code: 204</b>`;
+        content.innerHTML += `<b>Updated no content. 204 </b>`;
         break;
       case 400:
         content.innerHTML = `<b>Bad Request! Status Code: 400. fields must be filled</b>`;
@@ -44,6 +52,7 @@ const content = document.querySelector('#content');
         content.innerHTML = `<b>Error code not impemented!</b>`;
         break;
     }
+    parseJSON(xhr, parseResponse);
   };
 
   const sendPostMethod = (e, itemForm) => {
@@ -56,12 +65,13 @@ const content = document.querySelector('#content');
     const xhr = new XMLHttpRequest();
 
     xhr.open(itemMethod, itemAction);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.onload = () => responseHandler(xhr, true);
 
     const data = `bucketListItem=${bucketItem.value}`;
     xhr.send(data);
+    e.preventDefault();
     return false;
   };
 
@@ -71,6 +81,7 @@ const content = document.querySelector('#content');
     const method = bucketListForm.querySelector('#methodSelect');
 
     const xhr = new XMLHttpRequest();
+
     xhr.open(method.value, url.value);
     if(method.value === 'get'){
       xhr.onload = () => responseHandler(xhr, true);
@@ -78,20 +89,27 @@ const content = document.querySelector('#content');
       xhr.onload = () => responseHandler(xhr, false);
     }
     xhr.setRequestHeader('Accept', 'application/json');
-    xhr.send();
 
+    xhr.send();
     e.preventDefault();
     return false;
   }
+  const updateList = (e, itemForm, bucketListForm) => {
+    const content  = document.querySelector('#content');
+    
+    sendPostMethod(e, itemForm);
+    sendGetMethod(e, bucketListForm);
+    
+    //content.innerHTML += `<b></b>`;
+  } 
 
   const init = () => {
     const itemForm = document.getElementById('itemForm');
     const bucketListForm = document.getElementById('bucketListForm');
 
-    const addItem = (e) => sendPostMethod(e, itemForm);
+    const addItem = (e) => updateList(e, itemForm, bucketListForm);
     itemForm.addEventListener('submit', addItem);
 
-    
     const getItem = (e) => sendGetMethod(e, bucketListForm);
     bucketListForm.addEventListener('submit', getItem);
   };
