@@ -3,14 +3,16 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
-  background-color: #cccccc;
-  background-image: linear-gradient(white, #88a4db);
-  overflow: hidden;
+  font-family: 'Lekton' ;
+  background: rgb(255,255,255);
+  background: radial-gradient(circle, rgba(255,255,255,1) 56%, rgba(148,187,233,1) 100%);
+  overflow-x: hidden;
 }
 
 #top {
   text-align: center;
   margin: 0 auto;
+  font-family: 'Lekton' ;
 }
 
 #top h1 {
@@ -18,7 +20,22 @@ html, body {
 }
 
 #content {
-  margin-top: 100px;
-  font-size: 2em;
+  margin-top: -3%;
+  font-size: 1.5em;
   text-align: center;
+}
+
+#bucketListForm{
+  visibility: hidden;
+  display: block;
+  position: absolute;
+  margin-left: 200%;
+}
+
+#addItemButton{
+  font-family: 'Lekton';
+}
+
+#itemField{
+  font-family: 'Lekton';
 }

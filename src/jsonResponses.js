@@ -54,6 +54,24 @@ const addItem = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 
+const deleteItem = (request, response, body) => {
+  const responseJSON = {
+    message: 'Must select an already created bucket list item to delete',
+  };
+
+  if(body.bucketListItem){
+    for(var i = 0; i < bucketList.items.length; i++){
+      if(body.bucketListItem === bucketList.item[i]){
+        //delete the item from the object
+
+        //1 do we want to put each item on a button with an 'x' button to delete and when its pressed this method triggers?
+        //2 add delete button next to add button
+      }
+    }
+  }
+  
+};
+
 const notFound = (request, response) => {
   const responseJSON = {
     message: 'The page you are looking for was not found.',
@@ -67,6 +85,7 @@ const notFound = (request, response) => {
 module.exports = {
   getItems,
   addItem,
+  deleteItem,
   notFound,
   getItemsMeta,
   notFoundMeta,

@@ -4,10 +4,9 @@
   <title>Create a Bucket List!</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
   <link rel="shortcut icon" href="">
+  <link href="https://fonts.googleapis.com/css?family=Lekton&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
-
-
 
   //parse the json
   const parseJSON = (xhr, content) => {
@@ -28,7 +27,8 @@
     }
   };
 
-  //keep in case of needing to check errors
+  //keep in case of needing to check errors 
+  //everything commented out because unneeded currently
   const responseHandler = (xhr, parseResponse) => {
     switch(xhr.status){
       case 200:
@@ -118,13 +118,13 @@
 </head>
 <body>
   <section id="top">
-    <h3>Create or Edit a Bucket List!</h3>
+    <h2>Create or Edit a Bucket List!</h2>
     <form id="itemForm" action="/addItem" method="post">
       <label for="bucketListItem">Bucket List Item:</label>
       <input id="itemField" type="text" name="bucketListItem"/>
 
       <p></p>
-      <input type="submit" value="Add Item"/>
+      <input type="submit" value="Add Item" id="addItemButton"/>
     </form>
 
     <p></p>
@@ -137,10 +137,10 @@
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>
-      <input type="submit" value="Get Item" />
+      <input type="submit" value="Get Item"/>
     </form>
   </section>
-  <section id="content">
-  </section>
+    <section id="content">
+    </section>
 </body>
 </html>
