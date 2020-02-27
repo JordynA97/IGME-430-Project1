@@ -93,9 +93,6 @@
     return false;
   }
   const updateList = (e, itemForm, bucketListForm) => {
-    const content  = document.querySelector('#content');
-    const itemEntered = document.querySelector('#itemField');
-
     if(itemEntered.value !== ''){
       sendPostMethod(e, itemForm);
       sendGetMethod(e, bucketListForm);
