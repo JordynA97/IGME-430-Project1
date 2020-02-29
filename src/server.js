@@ -6,6 +6,7 @@ const jsonHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
+//handle the post method
 const handlePost = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/addItem') {
     const res = response;
@@ -29,6 +30,7 @@ const handlePost = (request, response, parsedUrl) => {
   }
 };
 
+//handle the get method
 const handleGet = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/style.css') {
     htmlHandler.getCSS(request, response);
@@ -43,6 +45,7 @@ const handleGet = (request, response, parsedUrl) => {
   }
 };
 
+//handle head method
 const handleHead = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/getItems') {
     jsonHandler.getItemsMeta(request, response);
@@ -51,6 +54,7 @@ const handleHead = (request, response, parsedUrl) => {
   }
 };
 
+//on request method
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
@@ -63,6 +67,7 @@ const onRequest = (request, response) => {
   }
 };
 
+//set up the server
 http.createServer(onRequest).listen(port);
 
 console.dir(`Listening on 127.0.0.1: ${port}`);

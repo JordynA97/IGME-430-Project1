@@ -11,7 +11,6 @@
   //parse the json
   const parseJSON = (xhr, content) => {
     const list = document.querySelector('#content');
-    const itemEntered = document.querySelector('#itemField');
 
     if(xhr.response){
       const object = JSON.parse(xhr.response);
@@ -30,29 +29,30 @@
   //keep in case of needing to check errors 
   //everything commented out because unneeded currently
   const responseHandler = (xhr, parseResponse) => {
-    switch(xhr.status){
-      case 200:
-        //content.innerHTML = `<b>Success! Status Code: 200</b>`;
-        break;
-      case 201:
-        //content.innerHTML = `<b>Created! Status Code: 201</b>`;
-        break;
-      case 204:
-        //content.innerHTML = `<b>Updated no content. 204 </b>`;
-        break;
-      case 400:
-        //content.innerHTML = `<b>Bad Request! Status Code: 400. fields must be filled</b>`;
-        break;
-      case 404:
-        //content.innerHTML = `<b>Resource Not Found! Status Code: 404</b>`;
-        break;
-      default:
-        //content.innerHTML = `<b>Error code not impemented!</b>`;
-        break;
-    }
+    // switch(xhr.status){
+    //   case 200:
+    //     //content.innerHTML = `<b>Success! Status Code: 200</b>`;
+    //     break;
+    //   case 201:
+    //     //content.innerHTML = `<b>Created! Status Code: 201</b>`;
+    //     break;
+    //   case 204:
+    //     //content.innerHTML = `<b>Updated no content. 204 </b>`;
+    //     break;
+    //   case 400:
+    //     //content.innerHTML = `<b>Bad Request! Status Code: 400. fields must be filled</b>`;
+    //     break;
+    //   case 404:
+    //     //content.innerHTML = `<b>Resource Not Found! Status Code: 404</b>`;
+    //     break;
+    //   default:
+    //     //content.innerHTML = `<b>Error code not impemented!</b>`;
+    //     break;
+    // }
     parseJSON(xhr, parseResponse);
   };
 
+  //post method to be sent
   const sendPostMethod = (e, itemForm) => {
     const itemAction = itemForm.getAttribute('action');
     const itemMethod = itemForm.getAttribute('method');
@@ -73,6 +73,7 @@
     return false;
   };
 
+  //get method to be sent
   const sendGetMethod = (e, itemForm) => {
     const userMethod = bucketListForm.getAttribute('method');
     const url = bucketListForm.querySelector('#urlField');
@@ -92,7 +93,11 @@
     e.preventDefault();
     return false;
   }
+
+  //checks if user has entered something then updates list
   const updateList = (e, itemForm, bucketListForm) => {
+    const itemEntered = document.querySelector('#itemField');
+    
     if(itemEntered.value !== ''){
       sendPostMethod(e, itemForm);
       sendGetMethod(e, bucketListForm);

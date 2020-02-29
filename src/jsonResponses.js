@@ -26,6 +26,9 @@ const getItemsMeta = (request, response) => respondJSONMeta(request, response, 2
 
 const notFoundMeta = (request, response) => respondJSONMeta(request, response, 404);
 
+//function to add an item to the list
+//start by checking if the user typed things in
+//return added item that was pushed into object
 const addItem = (request, response, body) => {
   const responseJSON = {
     message: 'Must enter a bucket list item.',
@@ -44,6 +47,7 @@ const addItem = (request, response, body) => {
     responseCode = 400;
   }
 
+  //if something already exists then let teh user know
   for(let i = 0; i < bucketList.items.length; i++){
     if(body.bucketListItem === bucketList.items[i]){
       console.dir("Already Exists in the List");
@@ -55,6 +59,7 @@ const addItem = (request, response, body) => {
   //push new item from text field into the array
   bucketList.items.push(body.bucketListItem);
 
+  //everything was created successfully
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';
     return respondJSON(request, response, responseCode, responseJSON);
@@ -62,6 +67,7 @@ const addItem = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 
+//to delete an item from the list
 const deleteItem = (request, response, body) => {
   const responseJSON = {
     message: 'Must select an already created bucket list item to delete',
@@ -75,7 +81,8 @@ const deleteItem = (request, response, body) => {
         //delete the item from the object
         bucketList.item[i].splice(bucketList.item[i], 1);
         
-        //1 do we want to put each item on a button with an 'x' button to delete and when its pressed this method triggers?
+        //1 each item on a button with an 'x'? 
+        //button to delete, when pressed this method triggers
         //2 add delete button next to add button
       }
     }
@@ -96,6 +103,7 @@ const deleteItem = (request, response, body) => {
   
 };
 
+//return if the /__ isnt found
 const notFound = (request, response) => {
   const responseJSON = {
     message: 'The page you are looking for was not found.',
