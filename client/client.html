@@ -19,36 +19,30 @@
         if(object.bucketList.items){
           list.innerHTML = `<p></p>`;
 
+          //loop through the bucketlist items
+          //create buttons for each
+          //each button calls deleteFromList()
           for(let i = 0; i < object.bucketList.items.length; i++){
-            list.innerHTML += `<br> ${object.bucketList.items[i]} </br>`;
+            let div = document.createElement('div');
+            let span = document.createElement('span');
+            let button = document.createElement('button');
+            button.className = 'deleteButton';
+            button.onclick = (e) => {
+              deleteFromList(e, object.bucketList.items[i]);
+            };
+          
+            span.innerHTML = object.bucketList.items[i];
+            button.innerHTML = 'delete';
+            div.appendChild(span);
+            div.appendChild(button);
+            list.appendChild(div);
           }
         }
     }
   };
 
-  //keep in case of needing to check errors 
-  //everything commented out because unneeded currently
+  //keep to call parseJSON
   const responseHandler = (xhr, parseResponse) => {
-    // switch(xhr.status){
-    //   case 200:
-    //     //content.innerHTML = `<b>Success! Status Code: 200</b>`;
-    //     break;
-    //   case 201:
-    //     //content.innerHTML = `<b>Created! Status Code: 201</b>`;
-    //     break;
-    //   case 204:
-    //     //content.innerHTML = `<b>Updated no content. 204 </b>`;
-    //     break;
-    //   case 400:
-    //     //content.innerHTML = `<b>Bad Request! Status Code: 400. fields must be filled</b>`;
-    //     break;
-    //   case 404:
-    //     //content.innerHTML = `<b>Resource Not Found! Status Code: 404</b>`;
-    //     break;
-    //   default:
-    //     //content.innerHTML = `<b>Error code not impemented!</b>`;
-    //     break;
-    // }
     parseJSON(xhr, parseResponse);
   };
 
@@ -56,7 +50,6 @@
   const sendPostMethod = (e, itemForm) => {
     const itemAction = itemForm.getAttribute('action');
     const itemMethod = itemForm.getAttribute('method');
-
     const bucketItem = itemForm.querySelector('#itemField');
 
     //have to set up for a new request
@@ -74,19 +67,12 @@
   };
 
   //get method to be sent
-  const sendGetMethod = (e, itemForm) => {
-    const userMethod = bucketListForm.getAttribute('method');
-    const url = bucketListForm.querySelector('#urlField');
-    const method = bucketListForm.querySelector('#methodSelect');
+  const sendGetMethod = (e) => {
 
     const xhr = new XMLHttpRequest();
 
-    xhr.open(method.value, url.value);
-    if(method.value === 'get'){
-      xhr.onload = () => responseHandler(xhr, true);
-    }else{
-      xhr.onload = () => responseHandler(xhr, false);
-    }
+    xhr.open('GET', '/getItems');
+    xhr.onload = () => responseHandler(xhr, true);
     xhr.setRequestHeader('Accept', 'application/json');
 
     xhr.send();
@@ -94,25 +80,41 @@
     return false;
   }
 
+  //send the delete method
+  const sendDeleteMethod = (e, bucketItem) => {
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('DELETE', '/deleteItem' );
+
+    const data = `bucketListItem=${bucketItem}`;
+    xhr.send(data);
+    e.preventDefault();
+    return false;
+
+  }
+
   //checks if user has entered something then updates list
-  const updateList = (e, itemForm, bucketListForm) => {
+  const updateList = (e, itemForm) => {
     const itemEntered = document.querySelector('#itemField');
     
     if(itemEntered.value !== ''){
       sendPostMethod(e, itemForm);
-      sendGetMethod(e, bucketListForm);
+      sendGetMethod(e);
     }
-  } 
+  }
 
+  //delete item from list/get the list back
+  const deleteFromList = (e, bucketItem) => {
+    sendDeleteMethod(e, bucketItem);
+    sendGetMethod(e);
+  }
+
+  //onload
   const init = () => {
     const itemForm = document.getElementById('itemForm');
-    const bucketListForm = document.getElementById('bucketListForm');
 
-    const addItem = (e) => updateList(e, itemForm, bucketListForm);
+    const addItem = (e) => updateList(e, itemForm);
     itemForm.addEventListener('submit', addItem);
-
-    const getItem = (e) => sendGetMethod(e, bucketListForm);
-    bucketListForm.addEventListener('submit', getItem);
   };
 
   window.onload = init;
@@ -128,21 +130,7 @@
       <p></p>
       <input type="submit" value="Add Item" id="addItemButton"/>
     </form>
-
     <p></p>
-    <form id="bucketListForm" action="/getItems" method="get">
-      <select id='urlField'>
-        <option value='/getItems'>/getItems</option>
-        <option value='/notReal'>/notReal</option>
-      </select>
-      <select id="methodSelect">
-        <option value="get">GET</option>
-        <option value="head">HEAD</option>
-      </select>
-      <input type="submit" value="Get Item"/>
-    </form>
-  </section>
-    <section id="content">
-    </section>
+  <section id="content"></section>
 </body>
 </html>

@@ -20,16 +20,15 @@ html, body {
 }
 
 #content {
-  margin-top: -3%;
+  margin-top: -2%;
   font-size: 1.5em;
   text-align: center;
 }
 
-#bucketListForm{
-  visibility: hidden;
-  display: block;
-  position: absolute;
-  margin-left: 200%;
+#errorResponse{
+  margin-top: -5%;
+  font-size: 2em;
+  text-align: center;
 }
 
 #addItemButton{
@@ -38,4 +37,8 @@ html, body {
 
 #itemField{
   font-family: 'Lekton';
+}
+
+.deleteButton{
+margin-left: 30px;
 }

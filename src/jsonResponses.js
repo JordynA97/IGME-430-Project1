@@ -32,6 +32,7 @@ const notFoundMeta = (request, response) => respondJSONMeta(request, response, 4
 const addItem = (request, response, body) => {
   const responseJSON = {
     message: 'Must enter a bucket list item.',
+    bucketList,
   };
 
   if (!body.bucketListItem) {
@@ -47,10 +48,9 @@ const addItem = (request, response, body) => {
     responseCode = 400;
   }
 
-  //if something already exists then let teh user know
+  //if something already exists
   for(let i = 0; i < bucketList.items.length; i++){
     if(body.bucketListItem === bucketList.items[i]){
-      console.dir("Already Exists in the List");
       responseJSON.id = 'alreadyExists';
       return respondJSON(request, response, 400, responseJSON);
     }
@@ -77,13 +77,8 @@ const deleteItem = (request, response, body) => {
 
   if(body.bucketListItem){
     for(var i = 0; i < bucketList.items.length; i++){
-      if(body.bucketListItem === bucketList.item[i]){
-        //delete the item from the object
-        bucketList.item[i].splice(bucketList.item[i], 1);
-        
-        //1 each item on a button with an 'x'? 
-        //button to delete, when pressed this method triggers
-        //2 add delete button next to add button
+      if(body.bucketListItem === bucketList.items[i]){
+        bucketList.items.splice(i, 1);
       }
     }
   }

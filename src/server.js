@@ -45,6 +45,30 @@ const handleGet = (request, response, parsedUrl) => {
   }
 };
 
+//handle delete method
+const handleDelete = (request, response, parsedUrl) => {
+  if (parsedUrl.pathname === '/deleteItem') {
+    const res = response;
+    const body = [];
+
+    request.on('error', (err) => {
+      console.dir(err);
+      res.statusCode = 400;
+      res.end();
+    });
+
+    request.on('data', (chunk) => {
+      body.push(chunk);
+    });
+
+    request.on('end', () => {
+      const bodyString = Buffer.concat(body).toString();
+      const bodyParams = query.parse(bodyString);
+      jsonHandler.deleteItem(request, res, bodyParams);
+    });
+  }
+};
+
 //handle head method
 const handleHead = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/getItems') {
@@ -62,7 +86,9 @@ const onRequest = (request, response) => {
     handlePost(request, response, parsedUrl);
   } else if (request.method === 'GET') {
     handleGet(request, response, parsedUrl);
-  } else {
+  } else if (request.method === 'DELETE'){
+    handleDelete(request, response, parsedUrl);
+  }else{
     handleHead(request, response, parsedUrl);
   }
 };
