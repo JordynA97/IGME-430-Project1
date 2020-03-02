@@ -32,18 +32,20 @@ html, body {
 .deleteButton{
 margin-left: 30px;
 padding: 2px 12px;
+background-color: #a84343;
+color: white;
 }
 
 #addItemButton{
   padding: 8px 12px;
+  background-color: rgba(148,187,233,1);
+  color: black;
 }
 
 .deleteButton, #addItemButton {
   font-family: 'Lekton';
-  background-color: rgba(148,187,233,1);
   border-width: 1px;
   border-color: black;
-  color: black;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -51,6 +53,10 @@ padding: 2px 12px;
   box-shadow: 0 5px 10px lightgray;
 }
 
-.deleteButton:hover, #addItemButton:hover {
+#addItemButton:hover {
   background-color: #7394ba;
 }
+
+.deleteButton:hover{
+  background-color:#6e2b2b;
+} 
