@@ -26,6 +26,8 @@
             let div = document.createElement('div');
             let span = document.createElement('span');
             let button = document.createElement('button');
+            let p = document.createElement('p');
+
             button.className = 'deleteButton';
             button.onclick = (e) => {
               deleteFromList(e, object.bucketList.items[i]);
@@ -35,11 +37,12 @@
             button.innerHTML = 'delete';
             div.appendChild(span);
             div.appendChild(button);
+            div.appendChild(p);
             list.appendChild(div);
           }
         }
-    }
-  };
+      }
+    };
 
   //keep to call parseJSON
   const responseHandler = (xhr, parseResponse) => {
@@ -118,11 +121,12 @@
   };
 
   window.onload = init;
+
   </script>
 </head>
 <body>
   <section id="top">
-    <h2>Create or Edit a Bucket List!</h2>
+    <h2>Create and Edit your Bucket List!</h2>
     <form id="itemForm" action="/addItem" method="post">
       <label for="bucketListItem">Bucket List Item:</label>
       <input id="itemField" type="text" name="bucketListItem"/>
